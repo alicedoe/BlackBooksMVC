@@ -1,7 +1,7 @@
 <?php
 class Autoloader{
 
-    private static $_classDir = "../classes/";
+    private static $_classDir = "./classes/";
 
     public static function classAutoloader($class){
 //        echo $class."\n";

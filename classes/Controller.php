@@ -48,17 +48,20 @@ class Controller
     }
 
     public function testurl () {
+
         $url=$_SERVER['REQUEST_URI'];
         $url = explode("/",$url);
         $tabaction = [ "get","post","patch","put","delete"];
-        $verb = strtolower($url[1]);
-        if (in_array($verb, $tabaction)) {
+        $verb = strtolower($url[2]);
+        $method = strtolower($_SERVER['REQUEST_METHOD']);
+        if ( strtolower($url[1]) == "api" and in_array($verb, $tabaction)) {
             switch ($verb) {
-                case "get": $this->get_books($url[2]); break;
-                case "post": $this->post_books($url[2]); break;
-                case "patch": $this->patch_books($url[2]); break;
-                case "put": $this->put_books($url[2]); break;
-                case "delete": $this->delete_books($url[2]); break;
+                case "get": if ($method == "get") {$this->get_books($url[2]);} break;
+                case "post": if ($method == "post") {$this->post_books($url[2]);} break;
+                case "patch": if ($method == "patch") {$this->patch_books($url[2]);} break;
+                case "put": if ($method == "put") {$this->put_books($url[2]);} break;
+                case "delete": if ($method == "delete") {$this->delete_books($url[2]);} break;
+                default: $this->accueil();
             }
 
 
