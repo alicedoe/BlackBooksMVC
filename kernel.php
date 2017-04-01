@@ -39,20 +39,17 @@ final class Kernel {
      */
     public function main() {
 
-        $db = Database::getInstance();
-        $query = $db->query('SELECT * FROM books');
-        foreach ($query as $test) {
-            var_dump($test);
-        }
+        include 'view/headerView.php';
 
-
-        if (!empty($_GET['page']) && is_file('controleurs/'.$_GET['page'].'.php'))
+       if (!empty($_GET['page']) && is_file('controler/'.$_GET['page'].'.php'))
         {
-            include 'controleurs/'.$_GET['page'].'.php';
+            include 'controler/'.$_GET['page'].'.php';
         }
         else
         {
-            include 'controleurs/accueil.php';
+            include 'controler/accueil.php';
         }
+
+        include 'view/footerView.php';
     }
 }
