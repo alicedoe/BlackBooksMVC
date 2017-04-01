@@ -2,7 +2,7 @@
 
 final class Kernel {
     /**
-     * @var Singleton
+     * @var Kernel
      * @access private
      * @static
      */
@@ -21,7 +21,7 @@ final class Kernel {
      * si elle n'existe pas encore puis la retourne.
      *
      * @param void
-     * @return Singleton
+     * @return Kernel
      */
     public static function getInstance() {
         if(is_null(self::$_instance)) {
@@ -41,15 +41,22 @@ final class Kernel {
 
         include 'view/headerView.php';
 
-       if (!empty($_GET['page']) && is_file('controler/'.$_GET['page'].'.php'))
-        {
-            include 'controler/'.$_GET['page'].'.php';
-        }
-        else
-        {
-            include 'controler/accueil.php';
-        }
+        $welcome = new Controller();
+
+        $welcome->testurl();
+//        echo '' .$url."<br />";
+//        $route = new Routes();
+//
+//       if (!empty($_GET['page']) && is_file('controllers/'.$_GET['page'].'.php'))
+//        {
+//            include 'controllers/'.$_GET['page'].'.php';
+//        }
+//        else
+//        {
+//            include 'controllers/accueilController.php';
+//        }
 
         include 'view/footerView.php';
+        
     }
 }
