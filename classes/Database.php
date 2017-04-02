@@ -47,4 +47,9 @@ final class Database {
         return $this->pdo->columnCount();
     }
 
+    public function rowCount()
+    {
+        return $this->pdo->rowCount();
+    }
+
 }

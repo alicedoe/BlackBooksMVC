@@ -38,25 +38,37 @@ class Model {
     function get($truc, $id=NULL)
     {
 
-        $testtrucexist = $this->pdo->query("SELECT 1 FROM ".$truc." LIMIT 0");
+        $testtrucexist = $this->pdo->prepare("SELECT * FROM ".$truc);
+        $testtrucexist->execute();
+        $column = $testtrucexist->columnCount();
 
-        if ( !$testtrucexist ) {
+        if ( $column == 0 ) {
 
             $result['data'] = "Not Found";
             $result['status'] = "404";
             return $result;
+
 
         }
 
         else {
 
             if (!is_null($id) and is_numeric($id)) {
-                $query = $this->pdo->query('SELECT * FROM '.$truc.' WHERE id='.$id);
+                $testtrucexist = $this->pdo->prepare('SELECT * FROM '.$truc.' WHERE id='.$id);
+                $testtrucexist->execute();
+                $row = $testtrucexist->rowCount();
+                if ($row == 0 ) {
+                    $result['data'] = "Not Found";
+                    $result['status'] = "404";
+                    return $result;
+                } else {
+                    $query = $this->pdo->prepare('SELECT * FROM '.$truc.' WHERE id='.$id);
+                }
 
             } else {
-                $query = $this->pdo->query('SELECT * FROM '.$truc);
+                $query = $this->pdo->prepare('SELECT * FROM '.$truc);
             }
-
+            $query->execute();
             $result['data'] = "OK";
             $result['status'] = "200";
             $results = $query->fetchAll(PDO::FETCH_ASSOC);
