@@ -5,25 +5,38 @@ class Controller
 
     public function accueil()
     {
-
+        include 'view/headerView.php';
         include(dirname(__FILE__) . '/../view/accueil.php');
-
+        include 'view/footerView.php';
     }
 
     public function get_books($id = NULL)
     {
 
         $livres = new Model();
-        var_dump($livres->get_livres($id));
-        return json_encode($livres->get_livres($id));
+        echo $livres->get_livres($id);
 
     }
 
-    public function post_books($id = NULL)
+    public function get_cat($id = NULL)
     {
 
-        echo "post books";
+        $cat = new Model();
+        echo $cat->get_cat($id);
 
+    }
+
+    public function post_book($titre = NULL,$auteur = NULL)
+    {
+
+        echo "post book";
+
+    }
+
+    public function post_cat($nomcat = NULL)
+    {
+        $new_cat = new Model();
+        echo $new_cat->post_cat($nomcat);
     }
 
     public function patch_books($id = NULL)
@@ -52,16 +65,43 @@ class Controller
         $url=$_SERVER['REQUEST_URI'];
         $url = explode("/",$url);
         $tabaction = [ "get","post","patch","put","delete"];
-        $verb = strtolower($url[2]);
+
+        $verbs = array_map('strtolower', $url);
+
         $method = strtolower($_SERVER['REQUEST_METHOD']);
-        if ( strtolower($url[1]) == "api" and in_array($verb, $tabaction)) {
-            switch ($verb) {
-                case "get": if ($method == "get") {$this->get_books($url[2]);} break;
-                case "post": if ($method == "post") {$this->post_books($url[2]);} break;
+
+//        var_dump($verbs);
+
+        if ( $verbs[1] == "api" and in_array($verbs[2], $tabaction)) {
+            switch ($verbs[2]) {
+
+                case "get": if ($method == "get")
+                                {
+                                    if ($verbs[3] == "cat")
+                                    { $this->get_cat($verbs[4]); }
+                                    elseif ($verbs[3] == "books")
+                                    { $this->get_books($verbs[4]); }
+
+                                }
+                                    else { $this->accueil(); } break;
+
+                case "post": if ("post" == "post")
+                                {
+                                    if ($verbs[3] == "cat")
+                                        { $this->post_cat($verbs[4]); }
+                                    elseif ($verbs[3] == "book")
+                                        { $this->post_book($verbs[4],$verbs[5]); }
+                                }
+                                    else { $this->accueil(); } break;
+
                 case "patch": if ($method == "patch") {$this->patch_books($url[2]);} break;
+
                 case "put": if ($method == "put") {$this->put_books($url[2]);} break;
+
                 case "delete": if ($method == "delete") {$this->delete_books($url[2]);} break;
+
                 default: $this->accueil();
+
             }
 
 

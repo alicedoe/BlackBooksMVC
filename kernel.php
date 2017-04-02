@@ -39,7 +39,7 @@ final class Kernel {
      */
     public function main() {
 
-        include 'view/headerView.php';
+
 
         $welcome = new Controller();
 
@@ -56,7 +56,7 @@ final class Kernel {
 //            include 'controllers/accueilController.php';
 //        }
 
-        include 'view/footerView.php';
+
         
     }
 }

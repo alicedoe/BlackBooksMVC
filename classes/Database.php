@@ -17,12 +17,29 @@ final class Database {
         {
             self::$instance = new Database();
         }
+
         return self::$instance;
+
     }
 
     public function query($query)
     {
         return $this->pdo->query($query);
+    }
+
+    public function prepare($query)
+    {
+        return $this->pdo->prepare($query);
+    }
+
+    public function execute()
+    {
+        return $this->pdo->execute();
+    }
+
+    public function lastInsertId()
+    {
+        return $this->pdo->lastInsertId();
     }
 
 }
