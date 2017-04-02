@@ -7,49 +7,100 @@ class Model {
     public function __construct()
     {
         $this->pdo = Database::getInstance();
-//        header('Cache-Control: no-cache, must-revalidate');
-//        header('Expires: Mon, 26 Jul 1997 05:00:00 GMT');
-//        header('Content-type: application/json');
+
     }
 
-    function get_livres($id = NULL)
+    function delete($truc, $id)
     {
 
-        if (!is_null($id) and is_numeric($id)) {
-            $query = $this->pdo->query('SELECT * FROM books WHERE id='.$id);
-        } else {
-            $query = $this->pdo->query('SELECT * FROM books');
+        $testtrucexist = $this->pdo->query("SELECT 1 FROM ".$truc." LIMIT 0");
+
+        if ( !$testtrucexist ) {
+
+            $result['data'] = "Not Found";
+            $result['status'] = "404";
+            return $result;
+
         }
 
-        return json_encode($query->fetchAll(PDO::FETCH_ASSOC));
+        else {
 
-    }
-
-    function get_cat($id = NULL)
-    {
-
-        if (!is_null($id) and is_numeric($id)) {
-            $query = $this->pdo->query('SELECT * FROM categories WHERE id='.$id);
-        } else {
-            $query = $this->pdo->query('SELECT * FROM categories');
+            $sql = "DELETE FROM ".$truc." WHERE id= ".$id;
+            $req = $this->pdo->prepare($sql);
+            $req->execute();
+            $result['data'] = "OK";
+            $result['status'] = "200";
+            return $result;
         }
 
-        return json_encode($query->fetchAll(PDO::FETCH_ASSOC));
-
     }
 
-    function post_cat($nomcat = NULL )
+    function get($truc, $id=NULL)
     {
 
-        $sql = "INSERT INTO categories(Nom) VALUES($nomcat)";
-        $req = $this->pdo->prepare($sql);
-        $req->execute();
-        $id = $this->pdo->lastInsertId();
-        $query = $this->pdo->query('SELECT * FROM categories WHERE id='.$id);
-        return json_encode($query->fetchAll(PDO::FETCH_ASSOC));
+        $testtrucexist = $this->pdo->query("SELECT 1 FROM ".$truc." LIMIT 0");
+
+        if ( !$testtrucexist ) {
+
+            $result['data'] = "Not Found";
+            $result['status'] = "404";
+            return $result;
+
+        }
+
+        else {
+
+            if (!is_null($id) and is_numeric($id)) {
+                $query = $this->pdo->query('SELECT * FROM '.$truc.' WHERE id='.$id);
+
+            } else {
+                $query = $this->pdo->query('SELECT * FROM '.$truc);
+            }
+
+            $result['data'] = "OK";
+            $result['status'] = "200";
+            $results = $query->fetchAll(PDO::FETCH_ASSOC);
+            return array($result,$results);
+        }
 
     }
 
+    function post($truc, $param1, $param2 = NULL, $param3 = NULL, $param4 = NULL)
+    {
 
+        $testtrucexist = $this->pdo->query("SELECT 1 FROM ".$truc." LIMIT 0");
 
+        if ( !$testtrucexist ) {
+
+            $result['data'] = "Not Found";
+            $result['status'] = "404";
+            return $result;
+
+        }
+
+        else {
+            $testtrucexist = $this->pdo->prepare("SELECT * FROM ".$truc);
+            $testtrucexist->execute();
+            $column = $testtrucexist->columnCount();
+            $sql = "INSERT INTO ".$truc." VALUES (NULL";
+            for ($i=1; $i<$column; $i++) {
+
+                $sql .= ", ";
+                $sql .= "'".${'param'.$i}."'";
+
+            }
+
+            $sql .= ")";
+            $req = $this->pdo->prepare($sql);
+            $req->execute();
+
+            $id = $this->pdo->lastInsertId();
+            $query = $this->pdo->query('SELECT * FROM '.$truc.' WHERE id='.$id);
+            $results = $query->fetchAll(PDO::FETCH_ASSOC);
+            $result['data'] = "OK";
+            $result['status'] = "200";
+            return array($result,$results);
+        }
+
+    }
 }

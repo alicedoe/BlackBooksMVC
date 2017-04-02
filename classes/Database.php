@@ -42,4 +42,9 @@ final class Database {
         return $this->pdo->lastInsertId();
     }
 
+    public function columnCount()
+    {
+        return $this->pdo->columnCount();
+    }
+
 }
