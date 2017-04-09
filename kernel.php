@@ -43,20 +43,7 @@ final class Kernel {
 
         $welcome = new Controller();
 
-        $welcome->testurl();
-//        echo '' .$url."<br />";
-//        $route = new Routes();
-//
-//       if (!empty($_GET['page']) && is_file('controllers/'.$_GET['page'].'.php'))
-//        {
-//            include 'controllers/'.$_GET['page'].'.php';
-//        }
-//        else
-//        {
-//            include 'controllers/accueilController.php';
-//        }
-
-
+        $welcome->index();
         
     }
 }

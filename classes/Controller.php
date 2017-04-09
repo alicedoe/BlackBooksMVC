@@ -47,20 +47,31 @@ class Controller
         echo json_encode($results);
     }
 
-    public function testurl () {
+    public function index() {
 
         $url=$_SERVER['REQUEST_URI'];
+
         $url = explode('/', rtrim($url, '/'));
 
-        $method = $_SERVER['REQUEST_METHOD'];
+        if ($url[1] != "api") { $this->accueil(); } else {
+            $method = $_SERVER['REQUEST_METHOD'];
 
 
-        switch($method) {
-            case 'DELETE': $this->delete($url[2], $url[3]); break;
-            case 'POST': $this->post($url[2], $url[3], $url[4], $url[5], $url[6]); break;
-            case 'GET': $this->get($url[2], $url[3]); break;
-            default: $this->response('Method Not Allowed', 405);
-                break;
+            switch ($method) {
+                case 'DELETE':
+                    $this->delete($url[2], $url[3]);
+                    break;
+                case 'POST':
+                    $this->post($url[2], $url[3], $url[4], $url[5], $url[6]);
+                    break;
+                case 'GET':
+                    $this->get($url[2], $url[3]);
+                    break;
+                default:
+                    $this->response('Method Not Allowed', 405);
+                    break;
+            }
+
         }
     }
 
