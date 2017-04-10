@@ -28,9 +28,12 @@ class Model {
             $sql = "DELETE FROM ".$truc." WHERE id= ".$id;
             $req = $this->pdo->prepare($sql);
             $req->execute();
+            $query = $this->pdo->prepare('SELECT * FROM '.$truc);
+            $query->execute();
+            $results = $query->fetchAll(PDO::FETCH_ASSOC);
             $result['data'] = "OK";
             $result['status'] = "200";
-            return $result;
+            return array($result,$results);
         }
 
     }
@@ -106,8 +109,8 @@ class Model {
             $req = $this->pdo->prepare($sql);
             $req->execute();
 
-            $id = $this->pdo->lastInsertId();
-            $query = $this->pdo->query('SELECT * FROM '.$truc.' WHERE id='.$id);
+            $query = $this->pdo->prepare('SELECT * FROM '.$truc);
+            $query->execute();
             $results = $query->fetchAll(PDO::FETCH_ASSOC);
             $result['data'] = "OK";
             $result['status'] = "200";

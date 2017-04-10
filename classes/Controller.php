@@ -16,7 +16,7 @@ class Controller
 
         $delete = new Model();
         $result = $delete->delete($truc, $id);
-        $this->response($result['data'], $result['status']);
+        $this->response($result['data'], $result['status'], $result[1]);
 
     }
 
@@ -39,11 +39,14 @@ class Controller
     }
 
     public function response($data, $status = 200, $results) {
-        header("HTTP/1.1 " . $status . " " . $data);
-        header("Status: ". $status);
-        header('Cache-Control: no-cache, must-revalidate');
-        header('Expires: Mon, 26 Jul 1997 05:00:00 GMT');
-        header('Content-type: application/json');
+//        header("HTTP/1.1 " . $status . " " . $data);
+//        header("Status: ". $status);
+//        header('Cache-Control: no-cache, must-revalidate');
+//        header('Expires: Mon, 26 Jul 1997 05:00:00 GMT');
+        header('Access-Control-Allow-Headers: Origin, Content-Type, Accept, Authorization');
+        header('Access-Control-Allow-Methods: GET,PUT,POST,DELETE,OPTIONS');
+        header('Access-Control-Allow-Origin: *');
+//        header('Content-type: text/plain');
         echo json_encode($results);
     }
 
